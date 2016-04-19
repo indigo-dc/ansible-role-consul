@@ -1,0 +1,40 @@
+---
+- name: install dnsmasq
+  apt: name="dnsmasq" state=present
+  tags: dnsmasq
+
+- name: Bind dnsmasq to localhost and docker bridge
+  lineinfile: dest=/etc/dnsmasq.conf state=present line="{{item}}"
+  with_items:
+   - "listen-address=127.0.0.1"
+   - "listen-address={{ docker_bridge_ip }}"
+
+- name: configure consul resolution dnsmasq
+  template:
+    src: 10-consul.j2
+    dest: /etc/dnsmasq.d/10-consul
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart dnsmasq
+  tags: dnsmasq
+
+- name: make sure dnsmasq is running
+  service:
+    name: dnsmasq
+    state: started
+    enabled: yes
+  tags: dnsmasq
+
+- name: configure docker 
+  lineinfile:
+    dest: /etc/default/docker
+    state: present
+    insertafter: ^DOCKER_OPTS=.*
+    line: "DOCKER_OPTS=\"$DOCKER_OPTS --dns {{ docker_bridge_ip }} --dns 8.8.8.8 --dns-search service.{{ consul_domain }} \""
+  notify:
+    - restart docker
+  tags: dnsmasq
+
+- meta: flush_handlers

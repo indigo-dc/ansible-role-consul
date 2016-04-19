@@ -1,0 +1,77 @@
+- name: Install python-consul
+  pip:  name=python-consul  state=present
+
+- name: run consul container with bootstrap
+  docker:
+    name: consul
+    image: "{{ consul_image }}"
+    state: started
+    detach: true
+    restart_policy: always
+    net: bridge
+    ports:
+     - 8300:8300
+     - 8301:8301
+     - 8301:8301/udp
+     - 8302:8302
+     - 8302:8302/udp
+     - 8400:8400
+     - 8500:8500
+     - "{{ docker_bridge_ip }}:8600:53"
+     - "{{ docker_bridge_ip }}:8600:53/udp"   
+    hostname: "{{ ansible_hostname }}"
+    volumes:
+    - /mnt:/data
+    command: -server -advertise "{{consul_advertise}}" -bootstrap-expect "{{consul_bootstrap_expect}}" -ui-dir /ui
+  when: consul_mode == "server" and consul_bootstrap == "1"
+
+
+- name: run consul container with join ip
+  docker:
+    name: consul
+    image: "{{ consul_image }}"
+    state: started
+    detach: true
+    restart_policy: always
+    net: bridge
+    ports:
+     - 8300:8300
+     - 8301:8301
+     - 8301:8301/udp
+     - 8302:8302
+     - 8302:8302/udp
+     - 8400:8400
+     - 8500:8500
+     - "{{ docker_bridge_ip }}:8600:53"
+     - "{{ docker_bridge_ip }}:8600:53/udp"
+    volumes:
+    - /mnt:/data
+    hostname: "{{ ansible_hostname }}"
+    command: -server -advertise "{{consul_advertise}}" -join "{{consul_join_ip}}" -ui-dir /ui
+  when: consul_mode == "server" and consul_bootstrap == "0"
+
+- name: run consul client container with join ip
+  docker:
+    name: consul
+    image: "{{ consul_image }}"
+    state: started
+    detach: true
+    restart_policy: always
+    net: bridge
+    ports:
+     - 8300:8300
+     - 8301:8301
+     - 8301:8301/udp
+     - 8302:8302
+     - 8302:8302/udp
+     - 8400:8400
+     - 8500:8500
+     - "{{ docker_bridge_ip }}:8600:53"
+     - "{{ docker_bridge_ip }}:8600:53/udp"
+    volumes:
+    - /mnt:/data
+    hostname: "{{ ansible_hostname }}"
+    command: -advertise "{{consul_advertise}}" -join "{{consul_join_ip}}" -ui-dir /ui
+  when: consul_mode == "agent" 
+
+
