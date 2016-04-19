@@ -13,5 +13,5 @@ galaxy_info:
    - consul
 
 dependencies: 
-  - { role: indigo-dc.ansible-role-docker }
+  - { role: indigo-dc.docker }
 
