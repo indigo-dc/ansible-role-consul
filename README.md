@@ -1,28 +1,29 @@
 Role Name
 =========
 
-Install consul agent in agent or server mode (depending on the variable `consul_mode`) and dnsmaq setting . 
+Run consul in agent or server mode (depending on the variable `consul_mode`) in container using the image `progrium/consul` and configures consul as primary DNS for the host node and docker containers.
+
 This role has been specifically developed to be used for the deployment of Mesos in the framework of INDIGO-DataCloud project.
 
 Role Variables
 --------------
 
-- `docker_bridge_ip` 
-- ``
+- `docker_bridge_ip`: IP to be statically assigned to docker bridge
+- `consul_servers_list`: (optional) list of consul *server* nodes - alternatively, you can use a proper inventory file specifying the hosts group [consul_servers]
+- `consul_image` (default: progrium/consul)
+- `consul_version` (default: latest)
 
 Dependencies
 ------------
 
-- `ansible-role-docker`
+- `indigo-dc.docker`
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
+    - hosts: agents
       roles:
-         - { role: username.rolename, x: 42 }
+         - { role: indigo-dc.consul, docker_bridge_ip: "172.0.17.1", consul_mode: "agent", consul_servers_list: ["172.10.10.1", "172.10.10.2", "172.10.10.3" ] }
 
 License
 -------
