@@ -1,15 +1,16 @@
 - name: Install python-consul
   pip:  name=python-consul  state=present
 
+
 - name: run consul container with bootstrap
-  docker:
+  docker_container:
     name: consul
     image: "{{ consul_image }}"
-    state: reloaded
-    detach: true
+    state: started
+    detach: True
     restart_policy: always
-    net: bridge
-    ports:
+    network_mode: bridge
+    published_ports:
      - 8300:8300
      - 8301:8301
      - 8301:8301/udp
@@ -27,14 +28,14 @@
 
 
 - name: run consul container with join ip
-  docker:
+  docker_container:
     name: consul
     image: "{{ consul_image }}"
-    state: reloaded
-    detach: true
+    state: started
+    detach: True
     restart_policy: always
-    net: bridge
-    ports:
+    network_mode: bridge
+    published_ports:
      - 8300:8300
      - 8301:8301
      - 8301:8301/udp
@@ -51,14 +52,14 @@
   when: consul_mode == "server" and consul_bootstrap == "0"
 
 - name: run consul client container with join ip
-  docker:
+  docker_container:
     name: consul
     image: "{{ consul_image }}"
-    state: reloaded
-    detach: true
+    state: started
+    detach: True
     restart_policy: always
-    net: bridge
-    ports:
+    network_mode: bridge
+    published_ports:
      - 8300:8300
      - 8301:8301
      - 8301:8301/udp
