@@ -13,5 +13,7 @@ galaxy_info:
    - consul
 
 dependencies: 
-  - { role: indigo-dc.docker }
+  - role: indigo-dc.docker
+    docker_dns: [ "{{docker_bridge_ip}}", "8.8.8.8" ] 
+    docker_dns_search: "service.{{ consul_domain }}"
 

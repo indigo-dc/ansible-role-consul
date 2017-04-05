@@ -1,6 +1,6 @@
 ---
 - name: install dnsmasq
-  apt: name="dnsmasq" state=present
+  package: name="dnsmasq" state=present
   tags: dnsmasq
 
 - name: Bind dnsmasq to localhost and docker bridge
@@ -25,16 +25,6 @@
     name: dnsmasq
     state: started
     enabled: yes
-  tags: dnsmasq
-
-- name: configure docker 
-  lineinfile:
-    dest: /etc/default/docker
-    state: present
-    insertafter: ^DOCKER_OPTS=.*
-    line: "DOCKER_OPTS=\"$DOCKER_OPTS --dns {{ docker_bridge_ip }} --dns 8.8.8.8 --dns-search service.{{ consul_domain }} \""
-  notify:
-    - restart docker
   tags: dnsmasq
 
 - meta: flush_handlers
