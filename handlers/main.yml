@@ -5,3 +5,8 @@
     name: dnsmasq
     state: restarted
 
+- name: restart network service
+  service:
+    name: "{{network_service_name}}"
+    state: restarted
+

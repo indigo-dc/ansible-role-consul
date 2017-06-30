@@ -27,4 +27,11 @@
     enabled: yes
   tags: dnsmasq
 
+- name: update resolv.conf via dhclient conf
+  lineinfile: dest=/etc/dhcp/dhclient.conf state=present line="prepend domain-name-servers 127.0.0.1;"
+  notify:
+    - restart network service
+  tags: dnsmasq
+
 - meta: flush_handlers
+
