@@ -23,7 +23,7 @@ consul_join_ip: "
             {{ hostvars[groups[consul_servers_group][0]]['ansible_default_ipv4']['address'] }} 
         {%- endif -%}"
 consul_bootstrap_expect: "{{ consul_servers_list | length }}"
-consul_bootstrap: "{% if ansible_default_ipv4.address == consul_join_ip %}1{% else %}0{% endif %}"
+consul_bootstrap: "{% if consul_advertise == consul_join_ip %}1{% else %}0{% endif %}"
 #consul_client_addr: "0.0.0.0"
 #consul_node_name: "{{ ansible_hostname }}"
 
