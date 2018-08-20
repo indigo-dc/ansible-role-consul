@@ -19,6 +19,5 @@ galaxy_info:
 dependencies: 
   - src: indigo-dc.docker
     version: v0.0.2-dodas
-    vars:
-      docker_dns: [ "{{docker_bridge_ip}}", "8.8.8.8" ]
-      docker_dns_search: "service.{{ consul_domain }}" }
+    docker_dns: [ "{{docker_bridge_ip}}", "8.8.8.8" ]
+    docker_dns_search: "service.{{ consul_domain }}"
