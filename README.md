@@ -1,4 +1,4 @@
-Role Name
+consul
 =========
 
 Run consul in agent or server mode (depending on the variable `consul_mode`) in container using the image `progrium/consul` and configures consul as primary DNS for the host node and docker containers.
@@ -23,7 +23,7 @@ Example Playbook
 
     - hosts: agents
       roles:
-         - { role: indigo-dc.consul, docker_bridge_ip: "172.0.17.1", consul_mode: "agent", consul_servers_list: ["172.10.10.1", "172.10.10.2", "172.10.10.3" ] }
+         - { role: indigo-dc.consul, consul_mode: "agent", consul_servers_list: ["172.10.10.1", "172.10.10.2", "172.10.10.3" ] }
 
 License
 -------
