@@ -30,3 +30,5 @@ consul_bootstrap: "{% if consul_advertise == consul_join_ip %}1{% else %}0{% end
 consul_version: 'latest'
 consul_image: "progrium/consul:{{consul_version}}"
 
+##
+docker_bridge_ip: "{{ docker_bridge_ip_cidr.split('/')[0] }}"
